@@ -9,7 +9,7 @@ updates:
     schedule:
       interval: "daily"
   - package-ecosystem: "nuget"
-    directory: "/WebApp"
+    directory: "/Web"
     schedule:
       interval: "daily"
   - package-ecosystem: "npm"
