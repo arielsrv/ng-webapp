@@ -1,14 +1,20 @@
+using Core.Shared.Users.Application;
+using Core.Users.Application;
+using Core.Users.Domain;
+using Core.Users.Infrastructure;
 using Microsoft.OpenApi.Models;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 builder.Services.AddControllersWithViews();
 builder.Services.AddSwaggerGen(swaggerGenOptions =>
 {
-    swaggerGenOptions.SwaggerDoc("v1", new OpenApiInfo { Title = "ValorDolarHoy", Version = "v1" });
+    swaggerGenOptions.SwaggerDoc("v1", new OpenApiInfo { Title = "NgWebApp", Version = "v1" });
 });
+
+builder.Services.AddHttpClient<IUserRepository, UserHttpRepository>();
+builder.Services.AddSingleton<IGetUser, GetUser>();
 
 WebApplication app = builder.Build();
 
@@ -25,7 +31,6 @@ app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "NgWebApp v1
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
-
 
 app.MapControllerRoute(
     "default",
