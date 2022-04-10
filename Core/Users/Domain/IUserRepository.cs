@@ -4,5 +4,5 @@ namespace Core.Users.Domain;
 
 public interface IUserRepository
 {
-    public IObservable<UserResponse> GetUser(long id);
+    public IObservable<User> GetUser(long id);
 }

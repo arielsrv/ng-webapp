@@ -34,15 +34,15 @@ public class GetUserTest
         Assert.Equal("john@doe.com", actual.Email);
     }
 
-    private static IObservable<UserResponse> GetUserResponse()
+    private static IObservable<User> GetUserResponse()
     {
-        UserResponse userResponse = new()
+        User user = new()
         {
             Id = 1L,
             Name = "John Doe",
             Email = "john@doe.com"
         };
 
-        return Observable.Return(userResponse);
+        return Observable.Return(user);
     }
 }
