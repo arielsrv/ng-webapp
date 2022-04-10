@@ -1,10 +1,9 @@
 using System.Reactive.Threading.Tasks;
 using Core.Shared.Users.Application;
 using Core.Users.Application;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Core.Users.Infrastructure;
-
-using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
 [Route("users")]

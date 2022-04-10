@@ -2,7 +2,6 @@ using System;
 using System.Reactive.Linq;
 using Core.Users.Application;
 using Core.Users.Domain;
-using Core.Users.Infrastructure;
 using Moq;
 using Xunit;
 
