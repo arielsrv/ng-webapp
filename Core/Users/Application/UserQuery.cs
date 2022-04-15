@@ -4,16 +4,16 @@ using Core.Users.Domain;
 
 namespace Core.Users.Application;
 
-public class GetUser : IGetUser
+public class UserQuery : IUserQuery
 {
     private readonly IUserRepository userRepository;
 
-    public GetUser(IUserRepository userRepository)
+    public UserQuery(IUserRepository userRepository)
     {
         this.userRepository = userRepository;
     }
 
-    public IObservable<UserDto> ById(long id)
+    public IObservable<UserDto> GetById(long id)
     {
         return this.userRepository.GetUser(id).Map(response =>
         {

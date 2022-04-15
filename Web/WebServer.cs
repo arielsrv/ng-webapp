@@ -20,7 +20,7 @@ public static class WebServer
         });
 
         builder.Services.AddHttpClient<IUserRepository, UserHttpRepository>();
-        builder.Services.AddSingleton<IGetUser, GetUser>();
+        builder.Services.AddSingleton<IUserQuery, UserQuery>();
 
         WebApplication app = builder.Build();
 

@@ -1,5 +1,6 @@
 using System;
 using System.Reactive.Linq;
+using Core.Shared.Users.Application;
 using Core.Users.Application;
 using Core.Users.Domain;
 using Moq;
@@ -10,12 +11,12 @@ namespace Test.Unit.Users.Application;
 public class GetUserTest
 {
     private readonly Mock<IUserRepository> userRepository;
-    private readonly GetUser query;
+    private readonly IUserQuery userQuery;
 
     public GetUserTest()
     {
         this.userRepository = new Mock<IUserRepository>();
-        this.query = new GetUser(this.userRepository.Object);
+        this.userQuery = new UserQuery(this.userRepository.Object);
     }
 
     [Fact]
@@ -23,9 +24,9 @@ public class GetUserTest
     {
         this.userRepository
             .Setup(repository => repository.GetUser(1L))
-            .Returns(GetUserResponse());
+            .Returns(GetUser());
 
-        UserDto actual = this.query.ById(1L).Wait();
+        UserDto actual = this.userQuery.GetById(1L).Wait();
 
         Assert.NotNull(actual);
         Assert.Equal(1L, actual.Id);
@@ -33,7 +34,7 @@ public class GetUserTest
         Assert.Equal("john@doe.com", actual.Email);
     }
 
-    private static IObservable<User> GetUserResponse()
+    private static IObservable<User> GetUser()
     {
         User user = new()
         {

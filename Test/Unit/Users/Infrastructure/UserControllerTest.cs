@@ -11,21 +11,21 @@ namespace Test.Unit.Users.Infrastructure;
 
 public class UserControllerTest
 {
-    private readonly Mock<IGetUser> query;
+    private readonly Mock<IUserQuery> userQuery;
     private readonly UserController userController;
 
     public UserControllerTest()
     {
-        this.query = new Mock<IGetUser>();
-        this.userController = new UserController(this.query.Object);
+        this.userQuery = new Mock<IUserQuery>();
+        this.userController = new UserController(this.userQuery.Object);
     }
 
     [Fact]
     public void Get_User()
     {
-        this.query
-            .Setup(service => service.ById(1L))
-            .Returns(GetUser());
+        this.userQuery
+            .Setup(query => query.GetById(1L))
+            .Returns(GetUserDto());
 
         IActionResult actual = this.userController
             .GetUser(1L)
@@ -38,10 +38,10 @@ public class UserControllerTest
         OkObjectResult result = (OkObjectResult)actual;
         Assert.NotNull(result);
         Assert.Equal(200, result.StatusCode);
-        Assert.Equivalent(GetUser().Wait(), result.Value);
+        Assert.Equivalent(GetUserDto().Wait(), result.Value);
     }
 
-    private static IObservable<UserDto> GetUser()
+    private static IObservable<UserDto> GetUserDto()
     {
         UserDto userDto = new()
         {

@@ -9,17 +9,17 @@ namespace Core.Users.Infrastructure;
 [Route("users")]
 public class UserController : ControllerBase
 {
-    private readonly IGetUser getUser;
+    private readonly IUserQuery _userQuery;
 
-    public UserController(IGetUser getUser)
+    public UserController(IUserQuery userQuery)
     {
-        this.getUser = getUser;
+        this._userQuery = userQuery;
     }
 
     [HttpGet("{id:long}")]
     [ProducesResponseType(typeof(UserDto), 200)]
     public async Task<IActionResult> GetUser([FromRoute] long id)
     {
-        return new OkObjectResult(await this.getUser.ById(id).ToTask());
+        return new OkObjectResult(await this._userQuery.GetById(id).ToTask());
     }
 }

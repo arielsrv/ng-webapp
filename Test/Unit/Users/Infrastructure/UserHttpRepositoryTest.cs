@@ -12,14 +12,13 @@ namespace Test.Unit.Users.Infrastructure;
 public class UserHttpRepositoryTest
 {
     private readonly Mock<HttpClient> httpClient;
-    private readonly Mock<ILogger<UserHttpRepository>> logger;
     private readonly UserHttpRepository userHttpRepository;
 
     public UserHttpRepositoryTest()
     {
         this.httpClient = new Mock<HttpClient>();
-        this.logger = new Mock<ILogger<UserHttpRepository>>();
-        this.userHttpRepository = new UserHttpRepository(this.httpClient.Object, this.logger.Object);
+        Mock<ILogger<UserHttpRepository>> logger = new();
+        this.userHttpRepository = new UserHttpRepository(this.httpClient.Object, logger.Object);
     }
 
     [Fact]
@@ -27,7 +26,7 @@ public class UserHttpRepositoryTest
     {
         this.httpClient
             .Setup(client => client.SendAsync(It.IsAny<HttpRequestMessage>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync(GetResponse());
+            .ReturnsAsync(GetHttpResponse());
 
         User actual = this.userHttpRepository.GetUser(1L).Wait();
 
@@ -37,7 +36,7 @@ public class UserHttpRepositoryTest
         Assert.Equal("john@doe.com", actual.Email);
     }
 
-    private static HttpResponseMessage GetResponse()
+    private static HttpResponseMessage GetHttpResponse()
     {
         return new HttpResponseMessage
         {

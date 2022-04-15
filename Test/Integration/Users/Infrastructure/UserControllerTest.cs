@@ -15,15 +15,15 @@ namespace Test.Integration.Users.Infrastructure;
 public class UserControllerTest
 {
     private readonly HttpClient httpClient;
-    private readonly Mock<IGetUser> query;
+    private readonly Mock<IUserQuery> userQuery;
 
     public UserControllerTest()
     {
-        this.query = new Mock<IGetUser>();
+        this.userQuery = new Mock<IUserQuery>();
         WebApplicationFactory<App> application = new WebApplicationFactory<App>()
             .WithWebHostBuilder(builder =>
             {
-                builder.ConfigureServices(services => { services.AddSingleton(this.query.Object); });
+                builder.ConfigureServices(services => { services.AddSingleton(this.userQuery.Object); });
             });
         this.httpClient = application.CreateClient();
     }
@@ -31,8 +31,8 @@ public class UserControllerTest
     [Fact]
     public async void Get_Ok()
     {
-        this.query
-            .Setup(service => service.ById(1L))
+        this.userQuery
+            .Setup(query => query.GetById(1L))
             .Returns(GetUserDto());
 
         HttpResponseMessage httpResponseMessage = await this.httpClient.GetAsync("/users/1");
