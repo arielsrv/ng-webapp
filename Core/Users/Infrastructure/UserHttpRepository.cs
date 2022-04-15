@@ -1,6 +1,5 @@
 using System.Reactive.Observable.Aliases;
 using Core.Shared.Http;
-using Core.Users.Application;
 using Core.Users.Domain;
 using Microsoft.Extensions.Logging;
 

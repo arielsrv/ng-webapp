@@ -1,5 +1,6 @@
-import {Component, Inject} from "@angular/core";
-import {HttpClient} from "@angular/common/http";
+import { Component, Inject } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
+import { UserDto } from "./userDto";
 
 @Component({
   selector: 'app-users-component',
@@ -8,15 +9,13 @@ import {HttpClient} from "@angular/common/http";
 export class UsersComponent {
   public users: UserDto[] = [];
 
-  constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
-    http.get<UserDto[]>(baseUrl + 'users').subscribe(result => {
-      this.users = result;
-    }, error => console.error(error));
+  constructor(
+    httpClient: HttpClient,
+    @Inject('BASE_URL') baseUrl: string
+  ) {
+    httpClient.get<UserDto[]>(baseUrl + 'users')
+      .subscribe(result => {
+          this.users = result;
+      }, error => console.error(error));
   }
-}
-
-interface UserDto {
-  id: number;
-  name: string;
-  email: string
 }
