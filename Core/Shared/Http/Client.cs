@@ -18,7 +18,7 @@ public class Client : HttpClient
         this.logger = logger;
     }
 
-    protected IObservable<T> Get<T>(string requestUri) where T : new()
+    protected IObservable<T> Get<T>(string requestUri)
     {
         return Observable.Create(async (IObserver<T> observer) =>
         {
@@ -43,7 +43,7 @@ public class Client : HttpClient
                     };
                 }
 
-                T result = JsonConvert.DeserializeObject<T>(response) ?? new T();
+                T result = (T)(JsonConvert.DeserializeObject<T>(response) ?? new object());
 
                 observer.OnNext(result);
                 observer.OnCompleted();

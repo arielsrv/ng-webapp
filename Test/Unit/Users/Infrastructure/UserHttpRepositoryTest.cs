@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Reactive.Linq;
 using System.Threading;
@@ -34,6 +36,33 @@ public class UserHttpRepositoryTest
         Assert.Equal(1L, actual.Id);
         Assert.Equal("John Doe", actual.Name);
         Assert.Equal("john@doe.com", actual.Email);
+    }
+
+    [Fact]
+    public void Get_All_Users()
+    {
+        this.httpClient
+            .Setup(client => client.SendAsync(It.IsAny<HttpRequestMessage>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(GetHttpResponseList());
+
+        IEnumerable<User> actual = this.userHttpRepository.GetUsers()
+            .Wait()
+            .ToList();
+
+        Assert.NotNull(actual);
+        Assert.NotEmpty(actual);
+        Assert.Single(actual);
+        Assert.Equal(1, actual.First().Id);
+        Assert.Equal("John Doe", actual.First().Name);
+        Assert.Equal("john@doe.com", actual.First().Email);
+    }
+
+    private static HttpResponseMessage GetHttpResponseList()
+    {
+        return new HttpResponseMessage
+        {
+            Content = new StringContent("[{\"id\":1,\"name\":\"John Doe\",\"email\":\"john@doe.com\"}]")
+        };
     }
 
     private static HttpResponseMessage GetHttpResponse()

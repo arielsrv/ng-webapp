@@ -1,5 +1,6 @@
 using System.Reactive.Observable.Aliases;
 using Core.Shared.Http;
+using Core.Users.Application;
 using Core.Users.Domain;
 using Microsoft.Extensions.Logging;
 
@@ -27,6 +28,25 @@ public class UserHttpRepository : Client, IUserRepository
                     Email = response.Email
                 };
                 return user;
+            });
+    }
+
+    public IObservable<IEnumerable<User>> GetUsers()
+    {
+        const string url = $"https://gorest.co.in/public/v2/users";
+        return this.Get<IEnumerable<UserResponse>>(url)
+            .Map(response =>
+            {
+                return response.Select(userResponse =>
+                {
+                    User user = new()
+                    {
+                        Id = userResponse.Id,
+                        Name = userResponse.Name,
+                        Email = userResponse.Email
+                    };
+                    return user;
+                });
             });
     }
 }

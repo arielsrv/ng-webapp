@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Reactive.Linq;
 using Core.Shared.Users.Application;
@@ -39,11 +41,48 @@ public class UserControllerTest
         string responseString = await httpResponseMessage.Content.ReadAsStringAsync();
         Assert.NotNull(responseString);
 
-        UserDto userDto = JsonConvert.DeserializeObject<UserDto>(responseString);
-        Assert.NotNull(userDto);
-        Assert.Equal(1L, userDto.Id);
-        Assert.Equal("John Doe", userDto.Name);
-        Assert.Equal("john@doe.com", userDto.Email);
+        UserDto actual = JsonConvert.DeserializeObject<UserDto>(responseString);
+        Assert.NotNull(actual);
+        Assert.Equal(1L, actual.Id);
+        Assert.Equal("John Doe", actual.Name);
+        Assert.Equal("john@doe.com", actual.Email);
+    }
+
+    [Fact]
+    public async void Get_All_Ok()
+    {
+        this.userQuery
+            .Setup(query => query.GetAll())
+            .Returns(GetUserDtoList());
+
+        HttpResponseMessage httpResponseMessage = await this.httpClient.GetAsync("/users");
+        string responseString = await httpResponseMessage.Content.ReadAsStringAsync();
+        Assert.NotNull(responseString);
+
+        IEnumerable<UserDto> actual = JsonConvert.DeserializeObject<IEnumerable<UserDto>>(responseString)
+            .ToList();
+
+        Assert.NotNull(actual);
+        Assert.NotEmpty(actual);
+        Assert.Single(actual);
+        Assert.Equal(1, actual.First().Id);
+        Assert.Equal("John Doe", actual.First().Name);
+        Assert.Equal("john@doe.com", actual.First().Email);
+    }
+
+    private static IObservable<IEnumerable<UserDto>> GetUserDtoList()
+    {
+        List<UserDto> userDtoList = new()
+        {
+            new UserDto
+            {
+                Id = 1,
+                Name = "John Doe",
+                Email = "john@doe.com"
+            }
+        };
+
+        return Observable.Return(userDtoList);
     }
 
     private static IObservable<UserDto> GetUserDto()
