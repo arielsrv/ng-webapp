@@ -2,6 +2,7 @@
 using System.Net.Http.Headers;
 using System.Net.Mime;
 using System.Reactive.Linq;
+using Core.Shared.Errors;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
@@ -37,9 +38,9 @@ public class Client : HttpClient
                         $"Request failed with uri {requestUri}. Status code: {(int)httpResponseMessage.StatusCode}. Raw message: {response}. ");
                     throw httpResponseMessage.StatusCode switch
                     {
-                        HttpStatusCode.NotFound => new Exception(response),
-                        HttpStatusCode.BadRequest => new Exception(response),
-                        _ => new Exception(httpResponseMessage.ReasonPhrase ?? "Unknown reason")
+                        HttpStatusCode.NotFound => new ApiNotFoundException(response),
+                        HttpStatusCode.BadRequest => new ApiBadRequestException(response),
+                        _ => new ApiException(httpResponseMessage.ReasonPhrase ?? "Unknown reason")
                     };
                 }
 

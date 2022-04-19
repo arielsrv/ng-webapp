@@ -1,3 +1,4 @@
+using Core.Shared.Errors;
 using Core.Shared.Users.Application;
 using Core.Users.Application;
 using Core.Users.Domain;
@@ -38,6 +39,8 @@ public static class WebServer
         app.UseStaticFiles();
         app.UseRouting();
 
+        app.UseMiddleware<ErrorHandlerMiddleware>();
+        
         app.MapControllerRoute(
             "default",
             "{controller}/{action=Index}/{id?}");
