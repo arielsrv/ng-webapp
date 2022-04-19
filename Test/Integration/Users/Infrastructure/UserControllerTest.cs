@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Reactive.Linq;
+using System.Threading.Tasks;
+using Core.Shared.Errors;
 using Core.Shared.Users.Application;
 using Core.Users.Application;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -70,6 +72,64 @@ public class UserControllerTest
         Assert.Equal("john@doe.com", actual.First().Email);
     }
 
+    [Fact]
+    public async void Get_All_Internal_Server_Error()
+    {
+        this.userQuery.Setup(query => query.GetAll())
+            .Returns(Observable.Throw<UserDto[]>(new ApiException()));
+
+        HttpResponseMessage httpResponseMessage = await this.httpClient.GetAsync("/Users");
+        string responseString = await httpResponseMessage.Content.ReadAsStringAsync();
+        Assert.NotNull(responseString);
+
+        ErrorHandlerMiddleware.ErrorModel? errorModel =
+            JsonConvert.DeserializeObject<ErrorHandlerMiddleware.ErrorModel>(responseString);
+
+        Assert.NotNull(errorModel);
+        Assert.Equal(500, errorModel.Code);
+        Assert.Equal(nameof(ApiException), errorModel.Type);
+        Assert.NotNull(errorModel.Detail);
+    }
+
+    [Fact]
+    public async void Get_All_Not_Found()
+    {
+        this.userQuery.Setup(query => query.GetAll())
+            .Returns(Observable.Throw<UserDto[]>(new ApiNotFoundException("not found")));
+
+        HttpResponseMessage httpResponseMessage = await this.httpClient.GetAsync("/Users");
+        string responseString = await httpResponseMessage.Content.ReadAsStringAsync();
+        Assert.NotNull(responseString);
+
+        ErrorHandlerMiddleware.ErrorModel? errorModel =
+            JsonConvert.DeserializeObject<ErrorHandlerMiddleware.ErrorModel>(responseString);
+
+        Assert.NotNull(errorModel);
+        Assert.Equal(404, errorModel.Code);
+        Assert.Equal(nameof(ApiNotFoundException), errorModel.Type);
+        Assert.NotNull(errorModel.Message);
+        Assert.NotNull(errorModel.Detail);
+    }
+
+    [Fact]
+    public async void Get_All_Bad_Request()
+    {
+        this.userQuery.Setup(query => query.GetAll())
+            .Returns(Observable.Throw<UserDto[]>(new ApiBadRequestException("bad request")));
+
+        HttpResponseMessage httpResponseMessage = await this.httpClient.GetAsync("/Users");
+        string responseString = await httpResponseMessage.Content.ReadAsStringAsync();
+        Assert.NotNull(responseString);
+
+        ErrorHandlerMiddleware.ErrorModel? errorModel =
+            JsonConvert.DeserializeObject<ErrorHandlerMiddleware.ErrorModel>(responseString);
+
+        Assert.NotNull(errorModel);
+        Assert.Equal(400, errorModel.Code);
+        Assert.Equal(nameof(ApiBadRequestException), errorModel.Type);
+        Assert.NotNull(errorModel.Detail);
+    }
+    
     private static IObservable<IEnumerable<UserDto>> GetUserDtoList()
     {
         List<UserDto> userDtoList = new()
