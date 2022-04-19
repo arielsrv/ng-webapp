@@ -15,7 +15,7 @@ describe('CounterComponent', () => {
   }
 
   beforeEach(() => {
-    setUp()
+    setUp();
   });
 
   it('should display a title', (() => {
