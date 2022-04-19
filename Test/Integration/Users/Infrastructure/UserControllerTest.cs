@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Reactive.Linq;
-using System.Threading.Tasks;
 using Core.Shared.Errors;
 using Core.Shared.Users.Application;
 using Core.Users.Application;
@@ -82,8 +81,7 @@ public class UserControllerTest
         string responseString = await httpResponseMessage.Content.ReadAsStringAsync();
         Assert.NotNull(responseString);
 
-        ErrorHandlerMiddleware.ErrorModel? errorModel =
-            JsonConvert.DeserializeObject<ErrorHandlerMiddleware.ErrorModel>(responseString);
+        ErrorModel errorModel = JsonConvert.DeserializeObject<ErrorModel>(responseString);
 
         Assert.NotNull(errorModel);
         Assert.Equal(500, errorModel.Code);
@@ -101,8 +99,7 @@ public class UserControllerTest
         string responseString = await httpResponseMessage.Content.ReadAsStringAsync();
         Assert.NotNull(responseString);
 
-        ErrorHandlerMiddleware.ErrorModel? errorModel =
-            JsonConvert.DeserializeObject<ErrorHandlerMiddleware.ErrorModel>(responseString);
+        ErrorModel errorModel = JsonConvert.DeserializeObject<ErrorModel>(responseString);
 
         Assert.NotNull(errorModel);
         Assert.Equal(404, errorModel.Code);
@@ -121,15 +118,14 @@ public class UserControllerTest
         string responseString = await httpResponseMessage.Content.ReadAsStringAsync();
         Assert.NotNull(responseString);
 
-        ErrorHandlerMiddleware.ErrorModel? errorModel =
-            JsonConvert.DeserializeObject<ErrorHandlerMiddleware.ErrorModel>(responseString);
+        ErrorModel errorModel = JsonConvert.DeserializeObject<ErrorModel>(responseString);
 
         Assert.NotNull(errorModel);
         Assert.Equal(400, errorModel.Code);
         Assert.Equal(nameof(ApiBadRequestException), errorModel.Type);
         Assert.NotNull(errorModel.Detail);
     }
-    
+
     private static IObservable<IEnumerable<UserDto>> GetUserDtoList()
     {
         List<UserDto> userDtoList = new()
