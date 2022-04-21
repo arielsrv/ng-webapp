@@ -1,7 +1,7 @@
-import { Component, Inject, OnInit } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
-import { ActivatedRoute, ParamMap } from "@angular/router";
-import { UserDto } from "../userDto";
+import {Component, Inject, OnInit} from "@angular/core";
+import {HttpClient} from "@angular/common/http";
+import {ActivatedRoute, ParamMap} from "@angular/router";
+import {UserDto} from "../userDto";
 
 @Component({
   selector: 'app-users-component',
@@ -33,7 +33,7 @@ export class UsersDetailsComponent implements OnInit {
   private loadUser(params: ParamMap) {
     let id = params.get('id');
     this.busy = false;
-    this.httpClient.get<UserDto>(this.baseUrl + 'users/' + id)
+    this.httpClient.get<UserDto>(`${this.baseUrl}users/${id}`)
       .subscribe({
         next: result => {
           this.user = result;

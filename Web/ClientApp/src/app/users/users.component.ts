@@ -1,7 +1,7 @@
-import { Component, Inject } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
-import { UserDto } from "./userDto";
-import { Router } from "@angular/router";
+import {Component, Inject} from "@angular/core";
+import {HttpClient} from "@angular/common/http";
+import {UserDto} from "./userDto";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-users-component',
