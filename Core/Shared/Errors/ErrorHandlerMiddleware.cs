@@ -1,5 +1,6 @@
 using System.Net;
 using System.Net.Mime;
+using Core.Shared.Http;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 
@@ -46,10 +47,8 @@ public class ErrorHandlerMiddleware
 
     private static string GetErrorMessage(Exception error)
     {
-        const string httpClientKey = "HttpClient";
-
-        return error.Data.Count > 0 && error.Data.Contains(httpClientKey)
-            ? $"{error.Data[httpClientKey]}. {error.Message}"
+        return error.Data.Count > 0 && error.Data.Contains(Client.HttpClientKey)
+            ? $"{error.Data[Client.HttpClientKey]}. {error.Message}"
             : error.Message;
     }
 }

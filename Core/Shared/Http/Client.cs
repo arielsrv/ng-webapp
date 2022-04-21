@@ -12,6 +12,7 @@ public class Client : HttpClient
 {
     private readonly HttpClient httpClient;
     private readonly ILogger<Client> logger;
+    public const string HttpClientKey = "HttpClient";
 
     protected Client(HttpClient httpClient, ILogger<Client> logger)
     {
@@ -19,11 +20,11 @@ public class Client : HttpClient
         this.logger = logger;
     }
 
-    protected IObservable<T> Get<T>(string requestUri)
+    protected IObservable<T> Get<T>(string uri)
     {
         return Observable.Create(async (IObserver<T> observer) =>
         {
-            HttpRequestMessage httpRequestMessage = new(HttpMethod.Get, requestUri);
+            HttpRequestMessage httpRequestMessage = new(HttpMethod.Get, uri);
             httpRequestMessage.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue(MediaTypeNames.Application.Json));
 
             try
@@ -34,12 +35,13 @@ public class Client : HttpClient
 
                 if (!httpResponseMessage.IsSuccessStatusCode)
                 {
-                    this.logger.LogError(
-                        $"Request failed with uri {requestUri}. Status code: {(int)httpResponseMessage.StatusCode}. Raw message: {response}. ");
+                    string message =
+                        $"Request failed with uri {uri}. Status code: {(int)httpResponseMessage.StatusCode}.";
+                    this.logger.LogError(message);
                     throw httpResponseMessage.StatusCode switch
                     {
-                        HttpStatusCode.NotFound => new ApiNotFoundException(response),
-                        HttpStatusCode.BadRequest => new ApiBadRequestException(response),
+                        HttpStatusCode.NotFound => new ApiNotFoundException(message),
+                        HttpStatusCode.BadRequest => new ApiBadRequestException(message),
                         _ => new ApiException(httpResponseMessage.ReasonPhrase ?? "Unknown reason")
                     };
                 }
@@ -51,7 +53,7 @@ public class Client : HttpClient
             }
             catch (Exception e)
             {
-                e.Data.Add("HttpClient", this.GetType().Name);
+                e.Data.Add(HttpClientKey, this.GetType().Name);
                 observer.OnError(e);
                 throw;
             }
