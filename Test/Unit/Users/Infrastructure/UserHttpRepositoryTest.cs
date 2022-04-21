@@ -1,8 +1,10 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Reactive.Linq;
 using System.Threading;
+using Core.Shared.Errors;
 using Core.Users.Domain;
 using Core.Users.Infrastructure;
 using Microsoft.Extensions.Logging;
@@ -36,6 +38,62 @@ public class UserHttpRepositoryTest
         Assert.Equal(1L, actual.Id);
         Assert.Equal("John Doe", actual.Name);
         Assert.Equal("john@doe.com", actual.Email);
+    }
+
+    [Fact]
+    public void Get_User_Not_Found()
+    {
+        this.httpClient
+            .Setup(client => client.SendAsync(It.IsAny<HttpRequestMessage>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(GetHttpResponse(HttpStatusCode.NotFound));
+
+        ApiNotFoundException actual = Assert.Throws<ApiNotFoundException>(() =>
+        {
+            this.userHttpRepository.GetUser(1L).Wait();
+        });
+
+        Assert.NotNull(actual);
+        Assert.Equal("Request failed with uri https://gorest.co.in/public/v2/users/1. Status code: 404.",
+            actual.Message);
+    }
+    
+    [Fact]
+    public void Get_User_Bad_Request()
+    {
+        this.httpClient
+            .Setup(client => client.SendAsync(It.IsAny<HttpRequestMessage>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(GetHttpResponse(HttpStatusCode.BadRequest));
+
+        ApiBadRequestException actual = Assert.Throws<ApiBadRequestException>(() =>
+        {
+            this.userHttpRepository.GetUser(1L).Wait();
+        });
+
+        Assert.NotNull(actual);
+        Assert.Equal("Request failed with uri https://gorest.co.in/public/v2/users/1. Status code: 400.",
+            actual.Message);
+    }
+
+    [Fact]
+    public void Get_User_Internal_Server_Error()
+    {
+        this.httpClient
+            .Setup(client => client.SendAsync(It.IsAny<HttpRequestMessage>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(GetHttpResponse(HttpStatusCode.InternalServerError));
+
+        ApiException actual = Assert.Throws<ApiException>(() => { this.userHttpRepository.GetUser(1L).Wait(); });
+
+        Assert.NotNull(actual);
+        Assert.Equal("Internal Server Error", actual.Message);
+    }
+
+    private static HttpResponseMessage GetHttpResponse(HttpStatusCode httpStatusCode)
+    {
+        return new HttpResponseMessage
+        {
+            Content = new StringContent("{\"message\":\"Error\"}"),
+            StatusCode = httpStatusCode
+        };
     }
 
     [Fact]

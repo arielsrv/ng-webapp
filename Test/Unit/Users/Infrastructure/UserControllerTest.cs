@@ -62,7 +62,7 @@ public class UserControllerTest
         Assert.Equal(200, result.StatusCode);
     }
 
-    private IObservable<IEnumerable<UserDto>> GetUserDtoList()
+    private static IObservable<IEnumerable<UserDto>> GetUserDtoList()
     {
         List<UserDto> userDtoList = new()
         {

@@ -77,7 +77,7 @@ public class UserControllerTest
         this.userQuery.Setup(query => query.GetAll())
             .Returns(Observable.Throw<UserDto[]>(new ApiException()));
 
-        HttpResponseMessage httpResponseMessage = await this.httpClient.GetAsync("/Users");
+        HttpResponseMessage httpResponseMessage = await this.httpClient.GetAsync("/users");
         string responseString = await httpResponseMessage.Content.ReadAsStringAsync();
         Assert.NotNull(responseString);
 
@@ -95,7 +95,7 @@ public class UserControllerTest
         this.userQuery.Setup(query => query.GetAll())
             .Returns(Observable.Throw<UserDto[]>(new ApiNotFoundException("not found")));
 
-        HttpResponseMessage httpResponseMessage = await this.httpClient.GetAsync("/Users");
+        HttpResponseMessage httpResponseMessage = await this.httpClient.GetAsync("/users");
         string responseString = await httpResponseMessage.Content.ReadAsStringAsync();
         Assert.NotNull(responseString);
 
@@ -114,7 +114,7 @@ public class UserControllerTest
         this.userQuery.Setup(query => query.GetAll())
             .Returns(Observable.Throw<UserDto[]>(new ApiBadRequestException("bad request")));
 
-        HttpResponseMessage httpResponseMessage = await this.httpClient.GetAsync("/Users");
+        HttpResponseMessage httpResponseMessage = await this.httpClient.GetAsync("/users");
         string responseString = await httpResponseMessage.Content.ReadAsStringAsync();
         Assert.NotNull(responseString);
 
