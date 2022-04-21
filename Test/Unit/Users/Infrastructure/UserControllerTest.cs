@@ -12,8 +12,8 @@ namespace Test.Unit.Users.Infrastructure;
 
 public class UserControllerTest
 {
-    private readonly Mock<IUserQuery> userQuery;
     private readonly UserController userController;
+    private readonly Mock<IUserQuery> userQuery;
 
     public UserControllerTest()
     {

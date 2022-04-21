@@ -56,7 +56,7 @@ public class UserHttpRepositoryTest
         Assert.Equal("Request failed with uri https://gorest.co.in/public/v2/users/1. Status code: 404.",
             actual.Message);
     }
-    
+
     [Fact]
     public void Get_User_Bad_Request()
     {

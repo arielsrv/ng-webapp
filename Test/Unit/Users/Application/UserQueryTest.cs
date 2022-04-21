@@ -12,8 +12,8 @@ namespace Test.Unit.Users.Application;
 
 public class UserQueryTest
 {
-    private readonly Mock<IUserRepository> userRepository;
     private readonly IUserQuery userQuery;
+    private readonly Mock<IUserRepository> userRepository;
 
     public UserQueryTest()
     {

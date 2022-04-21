@@ -10,9 +10,9 @@ namespace Core.Shared.Http;
 
 public class Client : HttpClient
 {
+    public const string HttpClientKey = "HttpClient";
     private readonly HttpClient httpClient;
     private readonly ILogger<Client> logger;
-    public const string HttpClientKey = "HttpClient";
 
     protected Client(HttpClient httpClient, ILogger<Client> logger)
     {
