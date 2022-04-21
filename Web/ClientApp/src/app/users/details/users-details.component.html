@@ -4,7 +4,7 @@
 
 <p *ngIf="isBusy"><em>Loading...</em></p>
 
-<table class='table table-hover' aria-labelledby="tableLabel" *ngIf="!isBusy">
+<table class='table table-striped' aria-labelledby="tableLabel" *ngIf="!isBusy">
   <thead>
   <tr>
     <th>Name</th>
@@ -12,7 +12,7 @@
   </tr>
   </thead>
   <tbody>
-  <tr *ngFor="let user of users" (click)="onClick(user.id)">
+  <tr>
     <td>{{ user.name }}</td>
     <td>{{ user.email }}</td>
   </tr>
