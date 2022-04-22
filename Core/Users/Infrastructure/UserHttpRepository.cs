@@ -32,7 +32,7 @@ public class UserHttpRepository : Client, IUserRepository
 
     public IObservable<IEnumerable<User>> GetUsers()
     {
-        const string url = $"https://gorest.co.in/public/v2/users";
+        const string url = "https://gorest.co.in/public/v2/users";
         return this.Get<IEnumerable<UserResponse>>(url)
             .Map(response =>
             {

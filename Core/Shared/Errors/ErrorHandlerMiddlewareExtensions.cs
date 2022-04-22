@@ -4,8 +4,8 @@ namespace Core.Shared.Errors;
 
 public static class ErrorHandlerMiddlewareExtensions
 {
-    public static IApplicationBuilder UseErrorHandler(this IApplicationBuilder builder)
+    public static void UseErrorHandler(this IApplicationBuilder builder)
     {
-        return builder.UseMiddleware<ErrorHandlerMiddleware>();
+        builder.UseMiddleware<ErrorHandlerMiddleware>();
     }
 }

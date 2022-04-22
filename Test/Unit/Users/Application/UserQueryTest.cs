@@ -59,7 +59,7 @@ public class UserQueryTest
     {
         List<User> userDtoList = new()
         {
-            new User()
+            new User
             {
                 Id = 1,
                 Name = "John Doe",

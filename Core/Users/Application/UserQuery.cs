@@ -1,4 +1,3 @@
-using System.Reactive.Linq;
 using System.Reactive.Observable.Aliases;
 using Core.Shared.Users.Application;
 using Core.Users.Domain;
