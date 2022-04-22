@@ -7,16 +7,19 @@ namespace Core.Users.Infrastructure;
 
 public class UserHttpRepository : Client, IUserRepository
 {
+    private readonly string urlBase;
+
     public UserHttpRepository(
         HttpClient httpClient,
         ILogger<UserHttpRepository> logger
     ) : base(httpClient, logger)
     {
+        this.urlBase = "https://gorest.co.in/public/v2";
     }
 
     public IObservable<User> GetUser(long id)
     {
-        string url = $"https://gorest.co.in/public/v2/users/{id}";
+        string url = $"{this.urlBase}/users/{id}";
         return this.Get<UserResponse>(url)
             .Map(response =>
             {
@@ -32,7 +35,7 @@ public class UserHttpRepository : Client, IUserRepository
 
     public IObservable<IEnumerable<User>> GetUsers()
     {
-        const string url = "https://gorest.co.in/public/v2/users";
+        string url = $"{this.urlBase}/users";
         return this.Get<IEnumerable<UserResponse>>(url)
             .Map(response =>
             {
