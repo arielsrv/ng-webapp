@@ -20,7 +20,7 @@ export class UsersComponent {
     @Inject('BASE_URL') private baseUrl: string,
     private router: Router
   ) {
-    this.users = {} as UserDto[];
+    this.users = [];
     this.busy = false;
     this.loadUsers();
   }
@@ -32,7 +32,9 @@ export class UsersComponent {
         next: result => {
           this.users = result;
         },
-        error: err => console.error(err),
+        error: err => {
+          console.error(err);
+        },
         complete: () => {
           this.busy = false;
         }
