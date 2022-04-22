@@ -26,7 +26,7 @@ export class UsersComponent {
   }
 
   private loadUsers() {
-    this.busy = false;
+    this.busy = true;
     this.httpClient.get<UserDto[]>(this.baseUrl + 'users')
       .subscribe({
         next: result => {

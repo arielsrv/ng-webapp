@@ -31,8 +31,8 @@ export class UsersDetailsComponent implements OnInit {
   }
 
   private loadUser(params: ParamMap) {
+    this.busy = true;
     let id = params.get('id');
-    this.busy = false;
     this.httpClient.get<UserDto>(`${this.baseUrl}users/${id}`)
       .subscribe({
         next: result => {
