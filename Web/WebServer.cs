@@ -39,7 +39,7 @@ public static class WebServer
         app.UseStaticFiles();
         app.UseRouting();
 
-        app.UseMiddleware<ErrorHandlerMiddleware>();
+        app.UseErrorHandler();
 
         app.MapControllerRoute(
             "default",
