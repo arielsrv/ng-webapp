@@ -23,7 +23,7 @@ jobs:
         run: dotnet build --no-restore
       - name: Test
         run: dotnet test --no-build --verbosity normal
-      - name: Test
+      - name: Test Report
         run: dotnet test  -p:CollectCoverage=true -p:CoverletOutput=TestResults/ -p:CoverletOutputFormat=opencover --no-build --verbosity normal Test/
       - name: Create Test Coverage Badge
         uses: simon-k/dotnet-code-coverage-badge@v1.0.0
@@ -35,3 +35,7 @@ jobs:
           gist-filename: code-coverage.json
           gist-id: 294599cbadb71f3ed834d6904a7c87fd
           gist-auth-token: ${{ secrets.GIST_AUTH_TOKEN }}   
+      - name: Print code coverage
+        run: echo "Code coverage percentage ${{steps.create_coverage_badge.outputs.percentage}}%"
+      - name: Print badge data
+        run: echo "Badge data ${{steps.test_step.outputs.badge}}"    
