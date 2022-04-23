@@ -47,7 +47,6 @@ public class Client : HttpClient
                 }
 
                 T result = (T)(JsonConvert.DeserializeObject<T>(response) ?? new object());
-
                 observer.OnNext(result);
                 observer.OnCompleted();
             }
