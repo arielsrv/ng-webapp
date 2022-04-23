@@ -55,6 +55,26 @@ public class UserQueryTest
         Assert.Equal("john@doe.com", actual.First().Email);
     }
 
+    [Fact]
+    public void Get_Users_By_Id()
+    {
+        this.userRepository
+            .Setup(repository => repository.GetUser(1L))
+            .Returns(Observable.Return(new User { Id = 1L }));
+
+        this.userRepository
+            .Setup(repository => repository.GetUser(2L))
+            .Returns(Observable.Return(new User { Id = 2L }));
+
+        IEnumerable<UserDto> actual = this.userQuery.GetById(new List<long> { 1L, 2L })
+            .Wait()
+            .ToList();
+
+        Assert.NotNull(actual);
+        Assert.NotEmpty(actual);
+        Assert.Equal(2, actual.Count());
+    }
+
     private static IObservable<IEnumerable<User>> GetUsers()
     {
         List<User> userDtoList = new()

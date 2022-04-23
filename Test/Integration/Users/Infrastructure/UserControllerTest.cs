@@ -65,10 +65,30 @@ public class UserControllerTest
 
         Assert.NotNull(actual);
         Assert.NotEmpty(actual);
-        Assert.Single(actual);
         Assert.Equal(1, actual.First().Id);
         Assert.Equal("John Doe", actual.First().Name);
         Assert.Equal("john@doe.com", actual.First().Email);
+    }
+
+    [Fact]
+    public async void Multi_Get_Ok()
+    {
+        this.userQuery
+            .Setup(query => query.GetById(new List<long> { 1L, 2L }))
+            .Returns(GetUserDtoList);
+
+        HttpResponseMessage httpResponseMessage = await this.httpClient.GetAsync("/users/multi-get?ids=1,2");
+        string responseString = await httpResponseMessage.Content.ReadAsStringAsync();
+        Assert.NotNull(responseString);
+
+        IEnumerable<UserDto> actual = JsonConvert.DeserializeObject<IEnumerable<UserDto>>(responseString)
+            .ToList();
+
+        Assert.NotNull(actual);
+        Assert.NotEmpty(actual);
+        Assert.Equal(2, actual.Count());
+        Assert.Contains(actual, userDto => userDto.Id == 1L);
+        Assert.Contains(actual, userDto => userDto.Id == 2L);
     }
 
     [Fact]
@@ -133,6 +153,12 @@ public class UserControllerTest
             new UserDto
             {
                 Id = 1,
+                Name = "John Doe",
+                Email = "john@doe.com"
+            },
+            new UserDto
+            {
+                Id = 2,
                 Name = "John Doe",
                 Email = "john@doe.com"
             }

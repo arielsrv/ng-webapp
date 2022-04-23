@@ -36,4 +36,19 @@ public class UserController : ControllerBase
     {
         return new OkObjectResult(await this.userQuery.GetById(id).ToTask());
     }
+
+    [HttpGet("multi-get")]
+    [ProducesResponseType(typeof(UserDto), 200)]
+    [ProducesResponseType(typeof(ErrorModel), 400)]
+    [ProducesResponseType(typeof(ErrorModel), 404)]
+    [ProducesResponseType(typeof(ErrorModel), 500)]
+    public async Task<IActionResult> GetUsers([FromQuery] string ids)
+    {
+        IEnumerable<long> request = ids
+            .Split(',')
+            .Select(long.Parse)
+            .AsEnumerable();
+
+        return new OkObjectResult(await this.userQuery.GetById(request).ToTask());
+    }
 }
