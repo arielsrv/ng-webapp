@@ -3,6 +3,7 @@ using Core.Shared.Errors;
 using Core.Shared.Users.Application;
 using Core.Users.Application;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Primitives;
 
 namespace Core.Users.Infrastructure;
 
@@ -44,11 +45,7 @@ public class UserController : ControllerBase
     [ProducesResponseType(typeof(ErrorModel), 500)]
     public async Task<IActionResult> GetUsers([FromQuery] string ids)
     {
-        IEnumerable<long> request = ids
-            .Split(',')
-            .Select(long.Parse)
-            .AsEnumerable();
-
+        IEnumerable<long> request = ids.ToEnumerable();
         return new OkObjectResult(await this.userQuery.GetById(request).ToTask());
     }
 }
