@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Reactive.Linq;
+using Core.Shared;
 using Core.Shared.Errors;
 using Core.Shared.Users.Application;
 using Core.Users.Application;
@@ -75,22 +76,23 @@ public class UserControllerTest
     {
         this.userQuery
             .Setup(query => query.GetById(new List<long> { 1L, 2L }))
-            .Returns(GetUserDtoList);
+            .Returns(GetMultiGetUserDto());
 
         HttpResponseMessage httpResponseMessage = await this.httpClient.GetAsync("/users/multi-get?ids=1,2");
         string responseString = await httpResponseMessage.Content.ReadAsStringAsync();
         Assert.NotNull(responseString);
 
-        IEnumerable<UserDto> actual = JsonConvert.DeserializeObject<IEnumerable<UserDto>>(responseString)
+        IEnumerable<MultiGetDto<UserDto>> actual = JsonConvert
+            .DeserializeObject<IEnumerable<MultiGetDto<UserDto>>>(responseString)
             .ToList();
 
         Assert.NotNull(actual);
         Assert.NotEmpty(actual);
         Assert.Equal(2, actual.Count());
-        Assert.Contains(actual, userDto => userDto.Id == 1L);
-        Assert.Contains(actual, userDto => userDto.Id == 2L);
+        Assert.Contains(actual, userDto => userDto.Body.Id == 1L);
+        Assert.Contains(actual, userDto => userDto.Body.Id == 2L);
     }
-
+    
     [Fact]
     public async void Get_All_Internal_Server_Error()
     {
@@ -106,7 +108,6 @@ public class UserControllerTest
         Assert.NotNull(errorModel);
         Assert.Equal(500, errorModel.Code);
         Assert.Equal(nameof(ApiException), errorModel.Type);
-        Assert.NotNull(errorModel.Detail);
     }
 
     [Fact]
@@ -125,7 +126,6 @@ public class UserControllerTest
         Assert.Equal(404, errorModel.Code);
         Assert.Equal(nameof(ApiNotFoundException), errorModel.Type);
         Assert.NotNull(errorModel.Message);
-        Assert.NotNull(errorModel.Detail);
     }
 
     [Fact]
@@ -143,7 +143,6 @@ public class UserControllerTest
         Assert.NotNull(errorModel);
         Assert.Equal(400, errorModel.Code);
         Assert.Equal(nameof(ApiBadRequestException), errorModel.Type);
-        Assert.NotNull(errorModel.Detail);
     }
 
     private static IObservable<IEnumerable<UserDto>> GetUserDtoList()
@@ -167,6 +166,36 @@ public class UserControllerTest
         return Observable.Return(userDtoList);
     }
 
+    private static IObservable<IEnumerable<MultiGetDto<UserDto>>> GetMultiGetUserDto()
+    {
+        List<MultiGetDto<UserDto>> userDtoList = new()
+        {
+            new MultiGetDto<UserDto>
+            {
+                Code = 200,
+                Body = new UserDto
+                {
+                    Id = 1,
+                    Name = "John Doe",
+                    Email = "john@doe.com"
+                }
+            },
+            new MultiGetDto<UserDto>
+            {
+                Code = 200,
+                Body = new UserDto
+                {
+                    Id = 2,
+                    Name = "John Doe",
+                    Email = "john@doe.com"
+                }
+            }
+        };
+
+        return Observable.Return(userDtoList);
+    }
+
+    
     private static IObservable<UserDto> GetUserDto()
     {
         UserDto userDto = new()

@@ -36,8 +36,8 @@ public class ErrorHandlerMiddleware
             ErrorModel errorModel = new(
                 httpResponse.StatusCode,
                 error.GetType().Name,
-                GetErrorMessage(error),
-                error.StackTrace);
+                GetErrorMessage(error)
+            );
 
             string result = JsonConvert.SerializeObject(errorModel);
 

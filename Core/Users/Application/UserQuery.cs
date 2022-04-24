@@ -1,6 +1,7 @@
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Reactive.Observable.Aliases;
+using Core.Shared;
 using Core.Shared.Users.Application;
 using Core.Users.Domain;
 
@@ -10,9 +11,7 @@ public class UserQuery : IUserQuery
 {
     private readonly IUserRepository userRepository;
 
-    public UserQuery(
-        IUserRepository userRepository
-    )
+    public UserQuery(IUserRepository userRepository)
     {
         this.userRepository = userRepository;
     }
@@ -32,14 +31,6 @@ public class UserQuery : IUserQuery
             });
     }
 
-    public IObservable<IEnumerable<UserDto>> GetById(IEnumerable<long> elements)
-    {
-        return Observable.Return(elements
-            .Select(this.GetById)
-            .Merge(10, Scheduler.Default)
-            .ToEnumerable());
-    }
-
     public IObservable<IEnumerable<UserDto>> GetAll()
     {
         return this.userRepository.GetUsers()
@@ -52,5 +43,21 @@ public class UserQuery : IUserQuery
                     Email = user.Email
                 });
             });
+    }
+
+    public IObservable<IEnumerable<MultiGetDto<UserDto>>> GetById(IEnumerable<long> elements)
+    {
+        return Observable.Return(elements
+            .Select(element => this.GetById(element)
+                .Map(userDto =>
+                {
+                    MultiGetDto<UserDto> multiGetDto = new()
+                    {
+                        Code = 200,
+                        Body = userDto
+                    };
+                    return multiGetDto;
+                })).Merge(10, Scheduler.CurrentThread)
+            .ToEnumerable());
     }
 }
