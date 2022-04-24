@@ -11,9 +11,7 @@ public class UserQuery : IUserQuery
 {
     private readonly IUserRepository userRepository;
 
-    public UserQuery(
-        IUserRepository userRepository
-    )
+    public UserQuery(IUserRepository userRepository)
     {
         this.userRepository = userRepository;
     }
@@ -59,8 +57,7 @@ public class UserQuery : IUserQuery
                         Body = userDto
                     };
                     return multiGetDto;
-                }))
-            .Merge(10, Scheduler.Default)
+                })).Merge(10, Scheduler.CurrentThread)
             .ToEnumerable());
     }
 }

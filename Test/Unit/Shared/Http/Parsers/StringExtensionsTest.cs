@@ -30,4 +30,12 @@ public class StringExtensionsTest
         const string values = "1, 2, a";
         Assert.Throws<ApiBadRequestException>(() => { values.ToEnumerable().ToList(); });
     }
+    
+    [Fact]
+    [SuppressMessage("ReSharper", "ReturnValueOfPureMethodIsNotUsed")]
+    public void String_Max_Values_To_Long_List_Throws_Error()
+    {
+        string values = string.Join(",", Enumerable.Range(1, 11).ToArray());
+        Assert.Throws<ApiBadRequestException>(() => { values.ToEnumerable().ToList(); });
+    }
 }

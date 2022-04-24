@@ -92,17 +92,7 @@ public class UserControllerTest
         Assert.Contains(actual, userDto => userDto.Body.Id == 1L);
         Assert.Contains(actual, userDto => userDto.Body.Id == 2L);
     }
-
-    private static IObservable<IEnumerable<MultiGetDto<UserDto>>> GetMultiGetUserDto()
-    {
-        return GetUserDtoList().Select(userDtos =>
-        {
-            return userDtos
-                .Select(value => new MultiGetDto<UserDto> { Body = value, Code = 200 })
-                .ToList();
-        });
-    }
-
+    
     [Fact]
     public async void Get_All_Internal_Server_Error()
     {
@@ -179,6 +169,36 @@ public class UserControllerTest
         return Observable.Return(userDtoList);
     }
 
+    private static IObservable<IEnumerable<MultiGetDto<UserDto>>> GetMultiGetUserDto()
+    {
+        List<MultiGetDto<UserDto>> userDtoList = new()
+        {
+            new MultiGetDto<UserDto>
+            {
+                Code = 200,
+                Body = new UserDto
+                {
+                    Id = 1,
+                    Name = "John Doe",
+                    Email = "john@doe.com"
+                }
+            },
+            new MultiGetDto<UserDto>
+            {
+                Code = 200,
+                Body = new UserDto
+                {
+                    Id = 2,
+                    Name = "John Doe",
+                    Email = "john@doe.com"
+                }
+            }
+        };
+
+        return Observable.Return(userDtoList);
+    }
+
+    
     private static IObservable<UserDto> GetUserDto()
     {
         UserDto userDto = new()
