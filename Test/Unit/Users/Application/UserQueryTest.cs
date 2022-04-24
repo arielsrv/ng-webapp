@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
+using Core.Shared;
 using Core.Shared.Users.Application;
 using Core.Users.Application;
 using Core.Users.Domain;
@@ -66,13 +67,13 @@ public class UserQueryTest
             .Setup(repository => repository.GetUser(2L))
             .Returns(Observable.Return(new User { Id = 2L }));
 
-        IEnumerable<UserDto> actual = this.userQuery.GetById(new List<long> { 1L, 2L })
+        List<MultiGetDto<UserDto>> actual = this.userQuery.GetById(new List<long> { 1L, 2L })
             .Wait()
             .ToList();
 
         Assert.NotNull(actual);
         Assert.NotEmpty(actual);
-        Assert.Equal(2, actual.Count());
+        Assert.Equal(2, actual.Count);
     }
 
     private static IObservable<IEnumerable<User>> GetUsers()

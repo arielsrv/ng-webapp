@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Reactive.Linq;
+using Core.Shared;
 using Core.Shared.Errors;
 using Core.Shared.Users.Application;
 using Core.Users.Application;
@@ -75,20 +76,31 @@ public class UserControllerTest
     {
         this.userQuery
             .Setup(query => query.GetById(new List<long> { 1L, 2L }))
-            .Returns(GetUserDtoList);
+            .Returns(GetMultiGetUserDto());
 
         HttpResponseMessage httpResponseMessage = await this.httpClient.GetAsync("/users/multi-get?ids=1,2");
         string responseString = await httpResponseMessage.Content.ReadAsStringAsync();
         Assert.NotNull(responseString);
 
-        IEnumerable<UserDto> actual = JsonConvert.DeserializeObject<IEnumerable<UserDto>>(responseString)
+        IEnumerable<MultiGetDto<UserDto>> actual = JsonConvert
+            .DeserializeObject<IEnumerable<MultiGetDto<UserDto>>>(responseString)
             .ToList();
 
         Assert.NotNull(actual);
         Assert.NotEmpty(actual);
         Assert.Equal(2, actual.Count());
-        Assert.Contains(actual, userDto => userDto.Id == 1L);
-        Assert.Contains(actual, userDto => userDto.Id == 2L);
+        Assert.Contains(actual, userDto => userDto.Body.Id == 1L);
+        Assert.Contains(actual, userDto => userDto.Body.Id == 2L);
+    }
+
+    private static IObservable<IEnumerable<MultiGetDto<UserDto>>> GetMultiGetUserDto()
+    {
+        return GetUserDtoList().Select(userDtos =>
+        {
+            return userDtos
+                .Select(value => new MultiGetDto<UserDto> { Body = value, Code = 200 })
+                .ToList();
+        });
     }
 
     [Fact]
