@@ -17,7 +17,7 @@ public class StringExtensionsTest
         IEnumerable<long> actual = values.ToEnumerable().ToList();
 
         Assert.NotEmpty(actual);
-        Assert.Equal(3, actual.Count());
+        Assert.Equal(4, actual.Count());
         Assert.Contains(actual, value => value == 1);
         Assert.Contains(actual, value => value == 2);
         Assert.Contains(actual, value => value == 3);
