@@ -89,8 +89,8 @@ public class UserControllerTest
         Assert.NotNull(actual);
         Assert.NotEmpty(actual);
         Assert.Equal(2, actual.Count());
-        Assert.Contains(actual, userDto => userDto.Body.Id == 1L);
-        Assert.Contains(actual, userDto => userDto.Body.Id == 2L);
+        Assert.Contains(actual, userDto => userDto.Body!.Id == 1L);
+        Assert.Contains(actual, userDto => userDto.Body!.Id == 2L);
     }
     
     [Fact]
