@@ -108,7 +108,6 @@ public class UserControllerTest
         Assert.NotNull(errorModel);
         Assert.Equal(500, errorModel.Code);
         Assert.Equal(nameof(ApiException), errorModel.Type);
-        Assert.NotNull(errorModel.Detail);
     }
 
     [Fact]
@@ -127,7 +126,6 @@ public class UserControllerTest
         Assert.Equal(404, errorModel.Code);
         Assert.Equal(nameof(ApiNotFoundException), errorModel.Type);
         Assert.NotNull(errorModel.Message);
-        Assert.NotNull(errorModel.Detail);
     }
 
     [Fact]
@@ -145,7 +143,6 @@ public class UserControllerTest
         Assert.NotNull(errorModel);
         Assert.Equal(400, errorModel.Code);
         Assert.Equal(nameof(ApiBadRequestException), errorModel.Type);
-        Assert.NotNull(errorModel.Detail);
     }
 
     private static IObservable<IEnumerable<UserDto>> GetUserDtoList()
