@@ -1,3 +1,4 @@
+using System.Reactive.Linq;
 using System.Reactive.Observable.Aliases;
 using Core.Shared.Http;
 using Core.Users.Domain;
@@ -21,11 +22,11 @@ public class UserHttpRepository : Client, IUserRepository
     {
         string url = $"{this.urlBase}/users/{id}";
         return this.Get<UserResponse>(url)
-            .Map(response =>
+            .FlatMap(response =>
             {
                 if (response == null)
                 {
-                    return null;
+                    return Observable.Return(default(User));
                 }
 
                 User user = new()
@@ -34,7 +35,7 @@ public class UserHttpRepository : Client, IUserRepository
                     Name = response.Name,
                     Email = response.Email
                 };
-                return user;
+                return Observable.Return(user);
             });
     }
 

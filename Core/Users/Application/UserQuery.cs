@@ -19,11 +19,11 @@ public class UserQuery : IUserQuery
     public IObservable<UserDto?> GetById(long id)
     {
         return this.userRepository.GetUser(id)
-            .Map(response =>
+            .FlatMap(response =>
             {
                 if (response == null)
                 {
-                    return null;
+                    return Observable.Return(default(UserDto));
                 }
 
                 UserDto userDto = new()
@@ -32,7 +32,7 @@ public class UserQuery : IUserQuery
                     Name = response.Name,
                     Email = response.Email
                 };
-                return userDto;
+                return Observable.Return(userDto);
             });
     }
 
