@@ -1,5 +1,3 @@
-using System.Text.Json.Serialization;
-
 namespace Core.Shared.Errors;
 
 public class ErrorModel

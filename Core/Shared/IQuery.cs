@@ -1,5 +1,3 @@
-using Core.Users.Application;
-
 namespace Core.Shared;
 
 public interface IQuery<in TInput, TOutput>
