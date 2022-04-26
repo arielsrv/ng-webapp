@@ -1,5 +1,6 @@
-using System.Reactive.Threading.Tasks;
+using Core.Shared;
 using Core.Shared.Errors;
+using Core.Shared.Tasks;
 using Core.Shared.Users.Application;
 using Core.Users.Application;
 using Microsoft.AspNetCore.Mvc;
@@ -24,7 +25,7 @@ public class UserController : ControllerBase
     [ProducesResponseType(typeof(ErrorModel), 500)]
     public async Task<IActionResult> GetAll()
     {
-        return new OkObjectResult(await this.userQuery.GetAll().ToTask());
+        return await TaskExecutor.ExecuteAsync(this.userQuery.GetAll());
     }
 
     [HttpGet("{id:long}")]
@@ -34,6 +35,17 @@ public class UserController : ControllerBase
     [ProducesResponseType(typeof(ErrorModel), 500)]
     public async Task<IActionResult> GetUser([FromRoute] long id)
     {
-        return new OkObjectResult(await this.userQuery.GetById(id).ToTask());
+        return await TaskExecutor.ExecuteAsync(this.userQuery.GetById(id));
+    }
+
+    [HttpGet("multi-get")]
+    [ProducesResponseType(typeof(IEnumerable<MultiGetDto<UserDto>>), 200)]
+    [ProducesResponseType(typeof(ErrorModel), 400)]
+    [ProducesResponseType(typeof(ErrorModel), 404)]
+    [ProducesResponseType(typeof(ErrorModel), 500)]
+    public async Task<IActionResult> GetUsers([FromQuery] string ids)
+    {
+        IEnumerable<long> request = ids.ToEnumerable();
+        return await TaskExecutor.ExecuteAsync(this.userQuery.GetById(request));
     }
 }

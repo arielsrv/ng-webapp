@@ -33,20 +33,23 @@ public class Client : HttpClient
                     await this.httpClient.SendAsync(httpRequestMessage, CancellationToken.None);
                 string response = await httpResponseMessage.Content.ReadAsStringAsync();
 
-                if (!httpResponseMessage.IsSuccessStatusCode)
+                if (httpResponseMessage.StatusCode is not (HttpStatusCode.OK or HttpStatusCode.NotFound))
                 {
                     string message =
                         $"Request failed with uri {uri}. Status code: {(int)httpResponseMessage.StatusCode}.";
                     this.logger.LogError(message);
                     throw httpResponseMessage.StatusCode switch
                     {
-                        HttpStatusCode.NotFound => new ApiNotFoundException(message),
                         HttpStatusCode.BadRequest => new ApiBadRequestException(message),
                         _ => new ApiException(httpResponseMessage.ReasonPhrase ?? "Unknown reason")
                     };
                 }
 
-                T result = (T)(JsonConvert.DeserializeObject<T>(response) ?? new object());
+                T result = default!;
+                if (httpResponseMessage.StatusCode != HttpStatusCode.NotFound)
+                {
+                    result = (T)(JsonConvert.DeserializeObject<T>(response) ?? new object());
+                }
 
                 observer.OnNext(result);
                 observer.OnCompleted();

@@ -1,7 +1,10 @@
+using Core.Users.Application;
+
 namespace Core.Shared;
 
 public interface IQuery<in TInput, out TOutput>
 {
-    IObservable<TOutput> GetById(TInput id);
+    IObservable<UserDto?> GetById(TInput id);
+    IObservable<IEnumerable<MultiGetDto<UserDto>>> GetById(IEnumerable<long> id);
     IObservable<IEnumerable<TOutput>> GetAll();
 }
