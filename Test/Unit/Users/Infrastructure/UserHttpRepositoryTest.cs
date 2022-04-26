@@ -32,7 +32,7 @@ public class UserHttpRepositoryTest
             .Setup(client => client.SendAsync(It.IsAny<HttpRequestMessage>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(GetHttpResponse());
 
-        User actual = this.userHttpRepository.GetUser(1L).Wait();
+        User? actual = this.userHttpRepository.GetUser(1L).Wait();
 
         Assert.NotNull(actual);
         Assert.Equal(1L, actual.Id);

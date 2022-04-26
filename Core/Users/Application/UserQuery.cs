@@ -52,14 +52,18 @@ public class UserQuery : IUserQuery
 
     public IObservable<IEnumerable<MultiGetDto<UserDto>>> GetById(IEnumerable<long> elements)
     {
-        return Observable.Return(elements
-            .Select(element => this.GetById(element)
+        return elements
+            .Select(id => this.GetById(id)
                 .Map(userDto => userDto != null
                     ? MultiGetDto<UserDto>.CreateOk(userDto)
                     : MultiGetDto<UserDto>.CreateNotFound(new UserDto
                     {
-                        Id = element
-                    }))).Merge(10, Scheduler.CurrentThread)
-            .ToEnumerable());
+                        Id = id
+                    })))
+            .Merge(10, Scheduler.Default)
+            .ToList()
+            .Map(multiGetDtos => multiGetDtos
+                .OrderBy(multiGetDto => multiGetDto.Body!.Id)
+                .AsEnumerable());
     }
 }
