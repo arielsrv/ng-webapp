@@ -41,7 +41,6 @@ public class UserController : ControllerBase
     [HttpGet("multi-get")]
     [ProducesResponseType(typeof(IEnumerable<MultiGetDto<UserDto>>), 200)]
     [ProducesResponseType(typeof(ErrorModel), 400)]
-    [ProducesResponseType(typeof(ErrorModel), 404)]
     [ProducesResponseType(typeof(ErrorModel), 500)]
     public async Task<IActionResult> GetUsers([FromQuery] string ids)
     {

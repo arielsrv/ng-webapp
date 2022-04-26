@@ -75,6 +75,28 @@ public class UserQueryTest
         Assert.NotEmpty(actual);
         Assert.Equal(2, actual.Count);
     }
+    
+    [Fact]
+    public void Get_Partial_Users_By_Id()
+    {
+        this.userRepository
+            .Setup(repository => repository.GetUser(1L))
+            .Returns(Observable.Return(new User { Id = 1L }));
+
+        this.userRepository
+            .Setup(repository => repository.GetUser(2L))
+            .Returns(Observable.Return(default(User)));
+
+        List<MultiGetDto<UserDto>> actual = this.userQuery.GetById(new List<long> { 1L, 2L })
+            .Wait()
+            .ToList();
+
+        Assert.NotNull(actual);
+        Assert.NotEmpty(actual);
+        Assert.Equal(2, actual.Count);
+        Assert.Contains(actual, multiGetDto => multiGetDto.Code == 200);
+        Assert.Contains(actual, multiGetDto => multiGetDto.Code == 404);
+    }
 
     private static IObservable<IEnumerable<User>> GetUsers()
     {
