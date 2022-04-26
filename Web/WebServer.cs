@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using Core.Shared.Errors;
 using Core.Shared.Users.Application;
 using Core.Users.Application;
@@ -11,10 +12,14 @@ public static class WebServer
 {
     public static void Run(string[] args)
     {
-        WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+        WebApplicationBuilder builder = WebApplication.CreateBuilder(args); 
 
         // Add services to the container.
-        builder.Services.AddControllersWithViews();
+        builder.Services.AddControllersWithViews().AddJsonOptions(jsonOptions =>
+        {
+            jsonOptions.JsonSerializerOptions.WriteIndented = true;
+            jsonOptions.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+        });
         builder.Services.AddSwaggerGen(swaggerGenOptions =>
         {
             swaggerGenOptions.SwaggerDoc("v1", new OpenApiInfo { Title = "NgWebApp", Version = "v1" });

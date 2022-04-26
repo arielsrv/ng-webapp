@@ -47,14 +47,9 @@ public class UserHttpRepositoryTest
             .Setup(client => client.SendAsync(It.IsAny<HttpRequestMessage>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(GetHttpResponse(HttpStatusCode.NotFound));
 
-        ApiNotFoundException actual = Assert.Throws<ApiNotFoundException>(() =>
-        {
-            this.userHttpRepository.GetUser(1L).Wait();
-        });
-
-        Assert.NotNull(actual);
-        Assert.Equal("Request failed with uri https://gorest.co.in/public/v2/users/1. Status code: 404.",
-            actual.Message);
+        User? actual = this.userHttpRepository.GetUser(1L).Wait();
+        
+        Assert.Null(actual);
     }
 
     [Fact]

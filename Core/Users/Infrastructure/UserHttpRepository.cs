@@ -1,3 +1,4 @@
+using System.Reactive.Linq;
 using System.Reactive.Observable.Aliases;
 using Core.Shared.Http;
 using Core.Users.Domain;
@@ -17,19 +18,24 @@ public class UserHttpRepository : Client, IUserRepository
         this.urlBase = "https://gorest.co.in/public/v2";
     }
 
-    public IObservable<User> GetUser(long id)
+    public IObservable<User?> GetUser(long id)
     {
         string url = $"{this.urlBase}/users/{id}";
         return this.Get<UserResponse>(url)
-            .Map(response =>
+            .FlatMap(response =>
             {
+                if (response == null)
+                {
+                    return Observable.Return(default(User));
+                }
+
                 User user = new()
                 {
                     Id = response.Id,
                     Name = response.Name,
                     Email = response.Email
                 };
-                return user;
+                return Observable.Return(user);
             });
     }
 

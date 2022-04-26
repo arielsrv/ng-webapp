@@ -16,18 +16,23 @@ public class UserQuery : IUserQuery
         this.userRepository = userRepository;
     }
 
-    public IObservable<UserDto> GetById(long id)
+    public IObservable<UserDto?> GetById(long id)
     {
         return this.userRepository.GetUser(id)
-            .Map(response =>
+            .FlatMap(response =>
             {
+                if (response == null)
+                {
+                    return Observable.Return(default(UserDto));
+                }
+
                 UserDto userDto = new()
                 {
                     Id = response.Id,
                     Name = response.Name,
                     Email = response.Email
                 };
-                return userDto;
+                return Observable.Return(userDto);
             });
     }
 
@@ -49,15 +54,12 @@ public class UserQuery : IUserQuery
     {
         return Observable.Return(elements
             .Select(element => this.GetById(element)
-                .Map(userDto =>
-                {
-                    MultiGetDto<UserDto> multiGetDto = new()
+                .Map(userDto => userDto != null
+                    ? MultiGetDto<UserDto>.CreateOk(userDto)
+                    : MultiGetDto<UserDto>.CreateNotFound(new UserDto
                     {
-                        Code = 200,
-                        Body = userDto
-                    };
-                    return multiGetDto;
-                })).Merge(10, Scheduler.CurrentThread)
+                        Id = element
+                    }))).Merge(10, Scheduler.CurrentThread)
             .ToEnumerable());
     }
 }
