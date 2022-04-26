@@ -29,7 +29,7 @@ public class UserQueryTest
             .Setup(repository => repository.GetUser(1L))
             .Returns(GetUser());
 
-        UserDto actual = this.userQuery.GetById(1L).Wait();
+        UserDto? actual = this.userQuery.GetById(1L).Wait();
 
         Assert.NotNull(actual);
         Assert.Equal(1L, actual.Id);
