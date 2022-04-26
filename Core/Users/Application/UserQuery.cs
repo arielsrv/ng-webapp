@@ -59,7 +59,8 @@ public class UserQuery : IUserQuery
                     : MultiGetDto<UserDto>.CreateNotFound(new UserDto
                     {
                         Id = element
-                    }))).Merge(10, Scheduler.CurrentThread)
-            .ToEnumerable());
+                    }))).Merge(10, Scheduler.Default)
+            .ToEnumerable()
+            .OrderBy(multiGetDto => multiGetDto.Body!.Id));
     }
 }
