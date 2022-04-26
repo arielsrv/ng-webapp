@@ -45,8 +45,7 @@ public static class WebServer
         app.UseRouting();
 
         app.UseErrorHandler();
-        
-        
+
         app.MapControllerRoute(
             "default",
             "{controller}/{action=Index}/{id?}");
