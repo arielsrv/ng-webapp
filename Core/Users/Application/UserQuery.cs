@@ -54,26 +54,12 @@ public class UserQuery : IUserQuery
     {
         return Observable.Return(elements
             .Select(element => this.GetById(element)
-                .Map(userDto =>
-                {
-                    MultiGetDto<UserDto> multiGetDto = new();
-
-                    if (userDto != null)
+                .Map(userDto => userDto != null
+                    ? MultiGetDto<UserDto>.CreateOk(userDto)
+                    : MultiGetDto<UserDto>.CreateNotFound(new UserDto
                     {
-                        multiGetDto.Code = 200;
-                        multiGetDto.Body = userDto;
-                    }
-                    else
-                    {
-                        multiGetDto.Code = 404;
-                        multiGetDto.Body = new UserDto
-                        {
-                            Id = element
-                        };
-                    }
-
-                    return multiGetDto;
-                })).Merge(10, Scheduler.CurrentThread)
+                        Id = element
+                    }))).Merge(10, Scheduler.CurrentThread)
             .ToEnumerable());
     }
 }
