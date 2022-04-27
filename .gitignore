@@ -235,3 +235,4 @@ _Pvt_Extensions
 
 .vscode/
 .DS_Store
+CodeCoverage/
