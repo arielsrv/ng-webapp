@@ -2,3 +2,4 @@
 ![badge](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/arielsrv/294599cbadb71f3ed834d6904a7c87fd/raw/code-coverage.json)
 
 # ng-webapp
+Illustrates how to use Rx in an dotnet core api.
