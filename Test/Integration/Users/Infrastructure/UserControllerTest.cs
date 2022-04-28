@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Reactive.Linq;
+using System.Threading.Tasks;
 using Core.Shared;
 using Core.Shared.Errors;
 using Core.Shared.Users.Application;
@@ -33,7 +34,7 @@ public class UserControllerTest
     }
 
     [Fact]
-    public async void Get_Ok()
+    public async Task Get_Ok()
     {
         this.userQuery
             .Setup(query => query.GetById(1L))
@@ -51,7 +52,7 @@ public class UserControllerTest
     }
 
     [Fact]
-    public async void Get_All_Ok()
+    public async Task Get_All_Ok()
     {
         this.userQuery
             .Setup(query => query.GetAll())
@@ -94,7 +95,7 @@ public class UserControllerTest
     }
     
     [Fact]
-    public async void Get_All_Internal_Server_Error()
+    public async Task Get_All_Internal_Server_Error()
     {
         this.userQuery.Setup(query => query.GetAll())
             .Returns(Observable.Throw<UserDto[]>(new ApiException()));
@@ -129,7 +130,7 @@ public class UserControllerTest
     }
 
     [Fact]
-    public async void Get_All_Bad_Request()
+    public async Task Get_All_Bad_Request()
     {
         this.userQuery.Setup(query => query.GetAll())
             .Returns(Observable.Throw<UserDto[]>(new ApiBadRequestException("bad request")));
