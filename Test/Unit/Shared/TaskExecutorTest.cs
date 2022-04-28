@@ -1,5 +1,6 @@
 using System;
 using System.Reactive.Linq;
+using System.Threading.Tasks;
 using Core.Shared.Errors;
 using Core.Shared.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -10,28 +11,24 @@ namespace Test.Unit.Shared;
 public class TaskExecutorTest
 {
     [Fact]
-    public void OkResult()
+    public async Task OkResult()
     {
         IObservable<int> observable = Observable.Return(1);
 
-        IActionResult actual = TaskExecutor.ExecuteAsync(observable)
-            .GetAwaiter()
-            .GetResult();
+        IActionResult actual = await TaskExecutor.ExecuteAsync(observable);
 
         Assert.NotNull(actual);
         Assert.IsType<OkObjectResult>(actual);
     }
 
     [Fact]
-    public void Not_Found()
+    public async Task NotFound()
     {
         IObservable<string?> observable = Observable.Return(default(string));
 
-        Assert.Throws<ApiNotFoundException>(() =>
+        await Assert.ThrowsAsync<ApiNotFoundException>(async () =>
         {
-            TaskExecutor.ExecuteAsync(observable)
-                .GetAwaiter()
-                .GetResult();
+            await TaskExecutor.ExecuteAsync(observable);
         });
     }
 }

@@ -44,7 +44,7 @@ public class UserController : ControllerBase
     [ProducesResponseType(typeof(ErrorModel), 500)]
     public async Task<IActionResult> GetUsers([FromQuery] string ids)
     {
-        IEnumerable<long> request = ids.ToEnumerable();
-        return await TaskExecutor.ExecuteAsync(this.userQuery.GetById(request));
+        IEnumerable<long> elements = ids.ToEnumerable();
+        return await TaskExecutor.ExecuteAsync(this.userQuery.GetById(elements));
     }
 }

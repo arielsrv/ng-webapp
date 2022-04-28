@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Core.Shared.Errors;
 using Xunit;
@@ -24,7 +23,6 @@ public class StringExtensionsTest
     }
 
     [Fact]
-    [SuppressMessage("ReSharper", "ReturnValueOfPureMethodIsNotUsed")]
     public void String_Values_To_Long_List_Throws_Error()
     {
         const string values = "1, 2, a";
@@ -32,7 +30,6 @@ public class StringExtensionsTest
     }
     
     [Fact]
-    [SuppressMessage("ReSharper", "ReturnValueOfPureMethodIsNotUsed")]
     public void String_Max_Values_To_Long_List_Throws_Error()
     {
         string values = string.Join(",", Enumerable.Range(1, 11).ToArray());

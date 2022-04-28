@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Reactive.Linq;
+using System.Threading.Tasks;
 using Core.Shared.Users.Application;
 using Core.Users.Application;
 using Core.Users.Infrastructure;
@@ -22,16 +23,13 @@ public class UserControllerTest
     }
 
     [Fact]
-    public void Get_User()
+    public async Task Get_User()
     {
         this.userQuery
             .Setup(query => query.GetById(1L))
             .Returns(GetUserDto());
 
-        IActionResult actual = this.userController
-            .GetUser(1L)
-            .GetAwaiter()
-            .GetResult();
+        IActionResult actual = await this.userController.GetUser(1L);
 
         Assert.NotNull(actual);
         Assert.IsType<OkObjectResult>(actual);
@@ -43,16 +41,13 @@ public class UserControllerTest
     }
 
     [Fact]
-    public void Get_All_Users()
+    public async Task Get_All_Users()
     {
         this.userQuery
             .Setup(query => query.GetAll())
             .Returns(GetUserDtoList());
 
-        IActionResult actual = this.userController
-            .GetAll()
-            .GetAwaiter()
-            .GetResult();
+        IActionResult actual = await this.userController.GetAll();
 
         Assert.NotNull(actual);
         Assert.IsType<OkObjectResult>(actual);

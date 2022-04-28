@@ -16,23 +16,23 @@ public class ErrorHandlerMiddlewareTest
     }
 
     [Fact]
-    public void Throws_Not_Found()
+    public async Task Throws_Not_Found()
     {
         ApiNotFoundException exception = new("not found");
         
         ErrorHandlerMiddleware errorHandlerMiddleware = new(_ => Task.FromException(exception));
-        errorHandlerMiddleware.InvokeAsync(this.httpContext).GetAwaiter().GetResult();
+        await errorHandlerMiddleware.InvokeAsync(this.httpContext);
 
         Assert.Equal(HttpStatusCode.NotFound, (HttpStatusCode)this.httpContext.Response.StatusCode);
     }
 
     [Fact]
-    public void Throws_Internal_Server_Error()
+    public async Task Throws_Internal_Server_Error()
     {
         ApiException exception = new("internal server error");
         
         ErrorHandlerMiddleware errorHandlerMiddleware = new(_ => Task.FromException(exception));
-        errorHandlerMiddleware.InvokeAsync(this.httpContext).GetAwaiter().GetResult();
+        await errorHandlerMiddleware.InvokeAsync(this.httpContext);
 
         Assert.Equal(HttpStatusCode.InternalServerError, (HttpStatusCode)this.httpContext.Response.StatusCode);
     }

@@ -18,7 +18,7 @@ public static class StringExtensions
     {
         if (!long.TryParse(value, out long number))
         {
-            throw new ApiBadRequestException("Invalid format for ids. e.g: ...&ids=1,2,3");
+            throw new ApiBadRequestException("Invalid format for ids. e.g: ...(&|?)ids=1,2,3");
         }
 
         if (index > maxConcurrent - 1)
