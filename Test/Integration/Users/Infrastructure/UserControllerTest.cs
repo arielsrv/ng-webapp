@@ -92,6 +92,8 @@ public class UserControllerTest
         Assert.Equal(2, actual.Count());
         Assert.Contains(actual, userDto => userDto.Body!.Id == 1L);
         Assert.Contains(actual, userDto => userDto.Body!.Id == 2L);
+        Assert.Contains(actual, userDto => userDto.Body!.Id == 1L && userDto.Code == 200);
+        Assert.Contains(actual, userDto => userDto.Body!.Id == 2L && userDto.Code == 404);
     }
     
     [Fact]
@@ -183,12 +185,10 @@ public class UserControllerTest
             },
             new MultiGetDto<UserDto>
             {
-                Code = 200,
+                Code = 404,
                 Body = new UserDto
                 {
-                    Id = 2,
-                    Name = "John Doe",
-                    Email = "john@doe.com"
+                    Id = 2
                 }
             }
         };
