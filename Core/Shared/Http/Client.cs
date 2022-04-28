@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System.Diagnostics;
+using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Mime;
 using System.Reactive.Linq;
@@ -22,10 +23,14 @@ public class Client : HttpClient
 
     protected IObservable<T> Get<T>(string uri)
     {
+        Stopwatch stopwatch = new();
+        stopwatch.Start();
+
         return Observable.Create(async (IObserver<T> observer) =>
         {
             HttpRequestMessage httpRequestMessage = new(HttpMethod.Get, uri);
-            httpRequestMessage.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue(MediaTypeNames.Application.Json));
+            httpRequestMessage.Headers.Accept.Add(
+                new MediaTypeWithQualityHeaderValue(MediaTypeNames.Application.Json));
 
             try
             {
@@ -50,6 +55,10 @@ public class Client : HttpClient
                 {
                     result = (T)(JsonConvert.DeserializeObject<T>(response) ?? new object());
                 }
+
+                stopwatch.Stop();
+                long end = stopwatch.ElapsedMilliseconds;
+                this.logger.LogInformation($"Elapsed time for uri {uri}: {end}ms");
 
                 observer.OnNext(result);
                 observer.OnCompleted();

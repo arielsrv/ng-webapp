@@ -5,6 +5,7 @@ using Core.Users.Application;
 using Core.Users.Domain;
 using Core.Users.Infrastructure;
 using Microsoft.OpenApi.Models;
+using Polly;
 
 namespace Web;
 
@@ -12,7 +13,7 @@ public static class WebServer
 {
     public static void Run(string[] args)
     {
-        WebApplicationBuilder builder = WebApplication.CreateBuilder(args); 
+        WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
         // Add services to the container.
         builder.Services.AddControllersWithViews().AddJsonOptions(jsonOptions =>
@@ -20,13 +21,14 @@ public static class WebServer
             jsonOptions.JsonSerializerOptions.WriteIndented = true;
             jsonOptions.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
         });
+        
         builder.Services.AddSwaggerGen(swaggerGenOptions =>
         {
             swaggerGenOptions.SwaggerDoc("v1", new OpenApiInfo { Title = "NgWebApp", Version = "v1" });
         });
 
-        builder.Services.AddHttpClient<IUserRepository, UserHttpRepository>();
-        builder.Services.AddSingleton<IUserQuery, UserQuery>();
+        ConfigureClients(builder);
+        ConfigureServices(builder);
 
         WebApplication app = builder.Build();
 
@@ -53,5 +55,18 @@ public static class WebServer
         app.MapFallbackToFile("index.html");
 
         app.Run();
+    }
+
+    private static void ConfigureServices(WebApplicationBuilder builder)
+    {
+        builder.Services.AddSingleton<IUserQuery, UserQuery>();
+    }
+
+    private static void ConfigureClients(WebApplicationBuilder builder)
+    {
+        builder.Services.AddHttpClient<IUserRepository, UserHttpRepository>()
+            .ConfigurePrimaryHttpMessageHandler(() => new SocketsHttpHandler { MaxConnectionsPerServer = 20 })
+            .AddPolicyHandler(Policy.TimeoutAsync<HttpResponseMessage>(TimeSpan.FromMilliseconds(1000)))
+            .AddPolicyHandler(Policy.BulkheadAsync<HttpResponseMessage>(20, int.MaxValue));
     }
 }
