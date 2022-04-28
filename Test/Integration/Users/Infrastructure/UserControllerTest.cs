@@ -73,7 +73,7 @@ public class UserControllerTest
     }
 
     [Fact]
-    public async void Multi_Get_Ok()
+    public async Task Multi_Get_Ok()
     {
         this.userQuery
             .Setup(query => query.GetById(new List<long> { 1L, 2L }))
@@ -114,7 +114,7 @@ public class UserControllerTest
     }
 
     [Fact]
-    public async void Get_All_Not_Found()
+    public async Task Get_All_Not_Found()
     {
         this.userQuery.Setup(query => query.GetAll())
             .Returns(Observable.Throw<UserDto[]>(new ApiNotFoundException("not found")));
