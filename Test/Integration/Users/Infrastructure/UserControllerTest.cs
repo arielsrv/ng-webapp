@@ -29,6 +29,7 @@ public class UserControllerTest
             .WithWebHostBuilder(builder =>
             {
                 builder.ConfigureServices(services => { services.AddSingleton(this.userQuery.Object); });
+                builder.UseSetting("https_port", "8080");
             });
         this.httpClient = application.CreateClient();
     }
@@ -95,7 +96,7 @@ public class UserControllerTest
         Assert.Contains(actual, userDto => userDto.Body!.Id == 1L && userDto.Code == 200);
         Assert.Contains(actual, userDto => userDto.Body!.Id == 2L && userDto.Code == 404);
     }
-    
+
     [Fact]
     public async Task Get_All_Internal_Server_Error()
     {
@@ -196,7 +197,7 @@ public class UserControllerTest
         return Observable.Return(userDtoList);
     }
 
-    
+
     private static IObservable<UserDto> GetUserDto()
     {
         UserDto userDto = new()
