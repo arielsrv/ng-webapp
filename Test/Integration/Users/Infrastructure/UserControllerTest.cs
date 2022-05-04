@@ -45,7 +45,7 @@ public class UserControllerTest
         string responseString = await httpResponseMessage.Content.ReadAsStringAsync();
         Assert.NotNull(responseString);
 
-        UserDto actual = JsonConvert.DeserializeObject<UserDto>(responseString);
+        UserDto actual = JsonConvert.DeserializeObject<UserDto>(responseString)!;
         Assert.NotNull(actual);
         Assert.Equal(1L, actual.Id);
         Assert.Equal("John Doe", actual.Name);
@@ -63,7 +63,7 @@ public class UserControllerTest
         string responseString = await httpResponseMessage.Content.ReadAsStringAsync();
         Assert.NotNull(responseString);
 
-        IEnumerable<UserDto> actual = JsonConvert.DeserializeObject<IEnumerable<UserDto>>(responseString)
+        IEnumerable<UserDto> actual = JsonConvert.DeserializeObject<IEnumerable<UserDto>>(responseString)!
             .ToList();
 
         Assert.NotNull(actual);
@@ -85,7 +85,7 @@ public class UserControllerTest
         Assert.NotNull(responseString);
 
         IEnumerable<MultiGetDto<UserDto>> actual = JsonConvert
-            .DeserializeObject<IEnumerable<MultiGetDto<UserDto>>>(responseString)
+            .DeserializeObject<IEnumerable<MultiGetDto<UserDto>>>(responseString)!
             .ToList();
 
         Assert.NotNull(actual);
@@ -107,7 +107,7 @@ public class UserControllerTest
         string responseString = await httpResponseMessage.Content.ReadAsStringAsync();
         Assert.NotNull(responseString);
 
-        ErrorModel errorModel = JsonConvert.DeserializeObject<ErrorModel>(responseString);
+        ErrorModel errorModel = JsonConvert.DeserializeObject<ErrorModel>(responseString)!;
 
         Assert.NotNull(errorModel);
         Assert.Equal(500, errorModel.Code);
@@ -124,7 +124,7 @@ public class UserControllerTest
         string responseString = await httpResponseMessage.Content.ReadAsStringAsync();
         Assert.NotNull(responseString);
 
-        ErrorModel errorModel = JsonConvert.DeserializeObject<ErrorModel>(responseString);
+        ErrorModel errorModel = JsonConvert.DeserializeObject<ErrorModel>(responseString)!;
 
         Assert.NotNull(errorModel);
         Assert.Equal(404, errorModel.Code);
@@ -142,7 +142,7 @@ public class UserControllerTest
         string responseString = await httpResponseMessage.Content.ReadAsStringAsync();
         Assert.NotNull(responseString);
 
-        ErrorModel errorModel = JsonConvert.DeserializeObject<ErrorModel>(responseString);
+        ErrorModel errorModel = JsonConvert.DeserializeObject<ErrorModel>(responseString)!;
 
         Assert.NotNull(errorModel);
         Assert.Equal(400, errorModel.Code);
