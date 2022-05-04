@@ -1,0 +1,10 @@
+coverlet.msbuild
+Microsoft.AspNetCore.Mvc.Testing
+Microsoft.NET.Test.Sdk
+Moq
+xunit
+xunit.analyzers
+xunit.core
+xunit.runner.visualstudio
+coverlet.collector
+ReportGenerator

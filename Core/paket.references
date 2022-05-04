@@ -1,0 +1,9 @@
+Microsoft.AspNetCore.Mvc.Core
+Microsoft.Extensions.Http.Polly
+Polly.Extensions.Http
+System.Reactive
+System.Reactive.Core
+System.Reactive.Interfaces
+System.Reactive.Linq
+System.Reactive.Observable.Aliases
+Newtonsoft.Json

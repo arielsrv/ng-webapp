@@ -1,25 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
-
-    <PropertyGroup>
-        <TargetFramework>net6.0</TargetFramework>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>enable</Nullable>
-        <LangVersion>10</LangVersion>
-    </PropertyGroup>
-
-    <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
-        <PackageReference Include="Microsoft.Extensions.Http.Polly" Version="6.0.4" />
-        <PackageReference Include="Polly.Extensions.Http" Version="3.0.0" />
-        <PackageReference Include="System.Reactive" Version="5.1.0-preview.207" />
-        <PackageReference Include="System.Reactive.Core" Version="5.1.0-preview.207" />
-        <PackageReference Include="System.Reactive.Interfaces" Version="5.1.0-preview.207" />
-        <PackageReference Include="System.Reactive.Linq" Version="5.1.0-preview.207" />
-        <PackageReference Include="System.Reactive.Observable.Aliases" Version="5.1.0-preview.207" /> 
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Shared\Users" />
-    </ItemGroup>
-
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <LangVersion>10</LangVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <Folder Include="Shared\Users" />
+  </ItemGroup>
+  <Import Project="..\.paket\Paket.Restore.targets" />
 </Project>
