@@ -10,10 +10,7 @@ public static class TaskExecutor
     {
         T result = await observable.ToTask();
 
-        if (result == null)
-        {
-            throw new ApiNotFoundException("Resource not found. ");
-        }
+        if (result == null) throw new ApiNotFoundException("Resource not found. ");
 
         return new OkObjectResult(result);
     }

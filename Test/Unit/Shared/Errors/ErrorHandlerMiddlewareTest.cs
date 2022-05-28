@@ -19,7 +19,7 @@ public class ErrorHandlerMiddlewareTest
     public async Task Throws_Not_Found()
     {
         ApiNotFoundException exception = new("not found");
-        
+
         ErrorHandlerMiddleware errorHandlerMiddleware = new(_ => Task.FromException(exception));
         await errorHandlerMiddleware.InvokeAsync(this.httpContext);
 
@@ -30,7 +30,7 @@ public class ErrorHandlerMiddlewareTest
     public async Task Throws_Internal_Server_Error()
     {
         ApiException exception = new("internal server error");
-        
+
         ErrorHandlerMiddleware errorHandlerMiddleware = new(_ => Task.FromException(exception));
         await errorHandlerMiddleware.InvokeAsync(this.httpContext);
 

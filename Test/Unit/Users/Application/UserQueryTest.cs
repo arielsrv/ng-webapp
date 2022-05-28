@@ -75,7 +75,7 @@ public class UserQueryTest
         Assert.NotEmpty(actual);
         Assert.Equal(2, actual.Count);
     }
-    
+
     [Fact]
     public void Get_Partial_Users_By_Id()
     {

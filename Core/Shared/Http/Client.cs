@@ -52,9 +52,7 @@ public class Client : HttpClient
 
                 T result = default!;
                 if (httpResponseMessage.StatusCode != HttpStatusCode.NotFound)
-                {
                     result = (T)(JsonConvert.DeserializeObject<T>(response) ?? new object());
-                }
 
                 stopwatch.Stop();
                 long end = stopwatch.ElapsedMilliseconds;

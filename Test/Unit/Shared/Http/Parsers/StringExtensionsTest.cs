@@ -28,7 +28,7 @@ public class StringExtensionsTest
         const string values = "1, 2, a";
         Assert.Throws<ApiBadRequestException>(() => { values.ToEnumerable().ToList(); });
     }
-    
+
     [Fact]
     public void String_Max_Values_To_Long_List_Throws_Error()
     {

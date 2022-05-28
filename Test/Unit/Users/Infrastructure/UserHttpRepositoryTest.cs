@@ -48,7 +48,7 @@ public class UserHttpRepositoryTest
             .ReturnsAsync(GetHttpResponse(HttpStatusCode.NotFound));
 
         User? actual = this.userHttpRepository.GetUser(1L).Wait();
-        
+
         Assert.Null(actual);
     }
 

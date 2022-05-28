@@ -24,10 +24,7 @@ public class UserHttpRepository : Client, IUserRepository
         return this.Get<UserResponse>(url)
             .FlatMap(response =>
             {
-                if (response == null)
-                {
-                    return Observable.Return(default(User));
-                }
+                if (response == null) return Observable.Return(default(User));
 
                 User user = new()
                 {

@@ -26,9 +26,6 @@ public class TaskExecutorTest
     {
         IObservable<string?> observable = Observable.Return(default(string));
 
-        await Assert.ThrowsAsync<ApiNotFoundException>(async () =>
-        {
-            await TaskExecutor.ExecuteAsync(observable);
-        });
+        await Assert.ThrowsAsync<ApiNotFoundException>(async () => { await TaskExecutor.ExecuteAsync(observable); });
     }
 }

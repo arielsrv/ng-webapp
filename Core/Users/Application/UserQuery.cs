@@ -21,10 +21,7 @@ public class UserQuery : IUserQuery
         return this.userRepository.GetUser(id)
             .FlatMap(response =>
             {
-                if (response == null)
-                {
-                    return Observable.Return(default(UserDto));
-                }
+                if (response == null) return Observable.Return(default(UserDto));
 
                 UserDto userDto = new()
                 {
