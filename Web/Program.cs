@@ -1,6 +1,6 @@
 namespace Web;
 
-public class App
+public class Program
 {
     public static void Main(string[] args)
     {

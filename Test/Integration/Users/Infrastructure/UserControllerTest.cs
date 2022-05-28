@@ -25,7 +25,7 @@ public class UserControllerTest
     public UserControllerTest()
     {
         this.userQuery = new Mock<IUserQuery>();
-        WebApplicationFactory<App> application = new WebApplicationFactory<App>()
+        WebApplicationFactory<Program> application = new WebApplicationFactory<Program>()
             .WithWebHostBuilder(builder =>
             {
                 builder.ConfigureServices(services => { services.AddSingleton(this.userQuery.Object); });
