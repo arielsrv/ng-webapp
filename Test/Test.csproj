@@ -28,7 +28,7 @@
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
-        <PackageReference Include="ReportGenerator" Version="5.1.9" />
+        <PackageReference Include="ReportGenerator" Version="5.1.10" />
     </ItemGroup>
 
     <ItemGroup>
