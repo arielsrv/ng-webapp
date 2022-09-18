@@ -4,5 +4,6 @@
   "version": "1.0.0",
   "engines": {
     "node": "16.x"
-  }
+  },
+  "packageManager": "yarn@3.2.3"
 }
