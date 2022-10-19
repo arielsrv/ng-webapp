@@ -22,7 +22,7 @@
     "@angular/forms": "~14.2.6",
     "@angular/platform-browser": "~14.2.6",
     "@angular/platform-browser-dynamic": "~14.2.6",
-    "@angular/platform-server": "~14.2.6",
+    "@angular/platform-server": "~14.2.7",
     "@angular/router": "~14.2.6",
     "bootstrap": "^5.2.2",
     "compression": "^1.7.4",
