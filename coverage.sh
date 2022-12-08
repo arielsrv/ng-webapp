@@ -1,10 +1,15 @@
 echo
 echo ">>> Running test..."
 echo
-dotnet test /p:CollectCoverage=true /p:CoverletOutput="../CodeCoverage/" /p:CoverletOutputFormat="opencover" --logger:"console;verbosity=detailed"
+
+export CollectCoverage=true
+export CoverletOutput=../CodeCoverage/
+export CoverletOutputFormat=opencover
+
+dotnet test NgWebApp.sln --no-build $CollectCoverage $CoverletOutput $CoverletOutputFormat
 echo ">>> Build coverage report..."
 echo
-dotnet /Users/"$USER"/.nuget/packages/reportgenerator/5.1.12/tools/net6.0/ReportGenerator.dll "-reports:CodeCoverage/coverage.opencover.xml" "-targetdir:CodeCoverage/Web" "-assemblyfilters:-Web;-Web.Views;" "-classfilters:-*Exception"
+dotnet /Users/"$USER"/.nuget/packages/reportgenerator/5.1.12/tools/net7.0/ReportGenerator.dll "-reports:CodeCoverage/coverage.opencover.xml" "-targetdir:CodeCoverage/Web" "-assemblyfilters:-Web;-Web.Views;" "-classfilters:-*Exception"
+
 echo
 open CodeCoverage/Web/index.html
-
