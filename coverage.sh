@@ -4,8 +4,8 @@ echo
 
 export SolutionFile=NgWebApp.sln
 export CollectCoverage=true
-#export CoverletOutput=../CodeCoverage/
-#export CoverletOutputFormat=opencover
+export CoverletOutput=../CodeCoverage/
+export CoverletOutputFormat=opencover
 
 dotnet test $SolutionFile --no-build $CollectCoverage
 echo ">>> Build coverage report..."
